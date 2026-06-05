@@ -1,0 +1,142 @@
+/* About ページ専用スタイル
+   - ベースは globals.css の .container / .card / .muted を使い、
+     About 固有の縦割り・タグ・カード一覧だけここで補う。 */
+
+.hero {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+}
+
+.heroLabel {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+.heroTitle {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+}
+
+.heroLead {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #1f2937;
+  margin: 0 0 16px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: #374151;
+}
+
+.section {
+  margin: 28px 0;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 4px;
+}
+
+.sectionLead {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+
+.sectionBody {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #1f2937;
+}
+
+.sectionBody p {
+  margin: 8px 0;
+}
+
+.sectionBody ul {
+  padding-left: 1.2em;
+  margin: 8px 0;
+}
+
+.sectionBody li {
+  margin: 4px 0;
+}
+
+.sectionBody code {
+  background: #f3f4f6;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.designCard {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px;
+  background: #fff;
+  margin: 10px 0;
+}
+
+.designCardTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 4px;
+}
+
+.designCardBody {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #374151;
+  margin: 0;
+}
+
+.designCardBody code {
+  background: #f3f4f6;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 11.5px;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  margin-top: 32px;
+  font-size: 13px;
+}
+
+.footer a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
