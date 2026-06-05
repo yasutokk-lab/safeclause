@@ -9,6 +9,9 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    // ランタイム側（src/lib/prisma.ts）と同じフォールバック値を使う。
+    // .env で DATABASE_URL を省略しても prisma CLI（db push / migrate 等）が
+    // 動くようにするため。
+    url: process.env["DATABASE_URL"] ?? "file:./dev.db",
   },
 });
