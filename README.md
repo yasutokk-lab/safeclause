@@ -19,7 +19,7 @@
 1. **PDF アップロード** — 10MB まで、`pdf-parse` でテキスト抽出（OCR 非対応）
 2. **AI 構造化解析** — Claude Opus 4.8 が `output_config.format` で JSON Schema 強制 + zod 二重バリデーション
 3. **解析結果一覧** — キーワード検索／リスクレベルフィルタ／解析日時ソート
-4. **レポート出力** — CSV ダウンロード / HTML レポート（印刷で PDF 化）
+4. **レポート出力** — CSV / PDF（Playwright Chromium でサーバ生成、ダウンロード形式）
 5. **メール+パス認証** — bcryptjs + jose による JWT Cookie セッション
 
 ## 技術スタック
@@ -33,6 +33,7 @@
 | PDF 解析 | `pdf-parse` | テキスト抽出のみ |
 | AI | **Anthropic Claude Opus 4.8** (`@anthropic-ai/sdk`) | `output_config.format` で JSON Schema 強制 |
 | バリデーション | **zod 4** | API 応答の二重バリデーション |
+| PDF 生成 | **Playwright (Chromium)** | サーバ側で HTML→PDF。日本語フォントも問題なし |
 
 ## こだわった設計判断
 
@@ -64,7 +65,10 @@ npm run prisma:generate
 # 4. SQLite DB 作成
 npm run db:push
 
-# 5. 開発サーバ起動
+# 5. Playwright 用 Chromium DL（PDF レポート生成に使用、初回のみ）
+npx playwright install chromium
+
+# 6. 開発サーバ起動
 npm run dev
 # → http://localhost:3000
 ```
@@ -90,21 +94,25 @@ safeclause/
 ├ src/
 │  ├ app/
 │  │  ├ api/
-│  │  │  ├ analyze/route.ts      # PDF 解析エンドポイント
-│  │  │  ├ auth/                 # ログイン/新規登録/ログアウト
-│  │  │  └ me/                   # セッションユーザー情報
-│  │  ├ documents/[id]/          # 解析結果詳細 + CSV/PDF レポート
-│  │  ├ about/                   # ポートフォリオ用 About ページ
+│  │  │  ├ analyze/route.ts          # PDF 解析エンドポイント
+│  │  │  ├ report-pdf/[id]/route.ts  # PDF レポート生成（Playwright）
+│  │  │  ├ auth/                     # ログイン/新規登録/ログアウト
+│  │  │  └ me/                       # セッションユーザー情報
+│  │  ├ documents/[id]/              # 解析結果詳細 + CSV/PDF レポート
+│  │  ├ about/                       # ポートフォリオ用 About ページ
 │  │  ├ layout.tsx
-│  │  └ page.tsx                 # ログイン後の一覧 + アップロード
+│  │  └ page.tsx                     # ログイン後の一覧 + アップロード
 │  └ lib/
 │     ├ ai/
-│     │  ├ types.ts              # zod スキーマ
-│     │  ├ errors.ts             # 型付きエラークラス
-│     │  ├ anthropic.ts          # Claude 実装
-│     │  └ contract-analyzer.ts  # 公開インターフェース
-│     ├ auth.ts                  # JWT セッション管理
-│     └ prisma.ts                # Prisma クライアント
+│     │  ├ types.ts                  # zod スキーマ
+│     │  ├ errors.ts                 # 型付きエラークラス
+│     │  ├ anthropic.ts              # Claude 実装
+│     │  └ contract-analyzer.ts      # 公開インターフェース
+│     ├ pdf/
+│     │  ├ report-html.ts            # PDF/CSV 共通の HTML 生成
+│     │  └ render-report-pdf.ts      # Playwright HTML→PDF レンダラー
+│     ├ auth.ts                      # JWT セッション管理
+│     └ prisma.ts                    # Prisma クライアント
 ├ prisma/
 │  └ schema.prisma               # User / Document / AnalysisItem
 ├ .env.example
@@ -137,6 +145,7 @@ HTTP 429 が返ります。[Anthropic Console](https://console.anthropic.com) �
 
 - 2026-05：MVP 実装（OpenAI gpt-4.1-mini で着手）
 - 2026-06：Claude Opus 4.8 へ切替・AI 抽象化層・型付きエラー・JSON Schema 強制・CSV インジェクション対策・プロンプトインジェクション対策などコードレビュー指摘事項を一括対応
+- 2026-06：PDF レポートを Playwright サーバ生成に変更（HTML 印刷からファイルダウンロード形式へ）
 
 ## ライセンス
 
